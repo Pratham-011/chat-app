@@ -5,8 +5,9 @@ import CheckEmailPage from "../pages/CheckEmailPage";
 import CheckPasswordPage from "../pages/CheckPasswordPage";
 import Home from "../pages/Home";
 import MessagePage from "../components/MessagePage";
-import AuthLayouts from "../layout";
 import Forgotpassword from "../pages/Forgotpassword";
+import Mainpage from "../pages/Mainpage";
+import Notfound from "../pages/Notfound";
 
 const router = createBrowserRouter([
 {
@@ -15,22 +16,26 @@ const router = createBrowserRouter([
     children : [
         {
             path : "register",
-            element : <AuthLayouts><RegisterPage/></AuthLayouts>
+            element : <RegisterPage/>
         },
         {
             path : 'email',
-            element : <AuthLayouts><CheckEmailPage/></AuthLayouts>
+            element : <CheckEmailPage/>
         },
         {
             path : 'password',
-            element : <AuthLayouts><CheckPasswordPage/></AuthLayouts>
-        },
+            element : <CheckPasswordPage/>
+                },
         {
             path : 'forgot-password',
-            element : <AuthLayouts><Forgotpassword/></AuthLayouts>
+            element : <Forgotpassword/>
+            },
+        {
+            path:'',
+            element: <Mainpage></Mainpage>
         },
         {
-            path : "",
+            path : "home",
             element : <Home/>,
             children : [
                 {
@@ -38,6 +43,10 @@ const router = createBrowserRouter([
                     element : <MessagePage/>
                 }
             ]
+        },
+        {
+            path: "*",
+            element: <Notfound />
         }
     ]
 }

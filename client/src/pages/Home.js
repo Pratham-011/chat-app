@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { logout, setOnlineUser, setSocketConnection, setUser } from '../redux/userSlice'
 import Sidebar from '../components/Sidebar'
+// import logo from '../assets/logo.png'
 import logo from '../assets/logo.png'
 import io from 'socket.io-client'
 
@@ -80,6 +81,8 @@ const Home = () => {
                 alt='logo'
               />
             </div>
+           
+
             <p className='text-lg mt-2 text-slate-500'>Select user to send message</p>
         </div>
     </div>

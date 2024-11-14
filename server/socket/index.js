@@ -8,7 +8,7 @@ const getConversation = require('../helpers/getConversation');
 
 const app = express();
 
-/***socket connection */
+/*socket connection */
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -165,9 +165,33 @@ io.on('connection', async (socket) => {
         onlineUser.delete(user._id.toString());
         console.log('disconnect user ', socket.id);
     });
+
+    //////////////////////////////////
+     // *NEW*: Listen for typing and stop typing events
+     socket.on('typing', ({ receiverId }) => {
+        io.to(receiverId).emit('typing', { senderId: user._id });
+    });
+
+    socket.on('stop typing', ({ receiverId }) => {
+        io.to(receiverId).emit('stop typing', { senderId: user._id });
+    });
+
+    socket.on('disconnect', () => {
+        onlineUser.delete(user._id.toString());
+        console.log('disconnect user ', socket.id);
+    });
+
+
+
+    ///////////////////////
+    
+
+
+
+    
 });
 
 module.exports = {
     app,
-    server
+    server
 };
