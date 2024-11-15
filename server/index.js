@@ -4,41 +4,26 @@ require('dotenv').config();
 const connectDB = require('./config/connectDB');
 const router = require('./routes/index');
 const cookiesParser = require('cookie-parser');
-const { app: socketApp, server } = require('./socket/index'); // Rename 'app' to 'socketApp'
 
 // Initialize Express app
 const app = express();
 
-// CORS configuration
-const allowedOrigins = [
-    process.env.FRONTEND_URL, // Production frontend
-    'http://localhost:3000'  // Development frontend
-];
+// Log the CORS origin for debugging
+console.log('CORS Origin:', process.env.FRONTEND_URL);
 
+// CORS configuration
 app.use(cors({
-    origin: (origin, callback) => {
-        // Allow requests with no origin (e.g., mobile apps, Postman) or listed origins
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true // Allow cookies and credentials
+    origin: process.env.FRONTEND_URL, // Ensure this is correct
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true // Allow credentials if needed
 }));
 
-// Middleware
 app.use(express.json());
 app.use(cookiesParser());
 
 // Handle preflight requests for all routes
-app.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.sendStatus(204); // No Content
-});
+app.options('*', cors());
 
 // Set the port
 const PORT = process.env.PORT || 8080;
@@ -55,7 +40,7 @@ app.use('/api', router);
 
 // Connect to the database and start the server
 connectDB().then(() => {
-    server.listen(PORT, () => {
+    app.listen(PORT, () => { // Use app.listen instead of server.listen if socket.io isn't needed
         console.log("Server running at " + PORT);
     });
 }).catch(err => {
