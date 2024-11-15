@@ -1,32 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const connectDB = require('./config/connectDB');
-const router = require('./routes/index');
-const cookiesParser = require('cookie-parser');
+const express = require('express')
+const cors = require('cors')
+require('dotenv').config()
+const connectDB = require('./config/connectDB')
+const router = require('./routes/index')
+const cookiesParser = require('cookie-parser')
+const { app, server } = require('./socket/index')
 
-// Initialize Express app
-const app = express();
-
-// Log the CORS origin for debugging
+// Use updated CORS configuration
 console.log('CORS Origin:', process.env.FRONTEND_URL);
-
-// CORS configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // Ensure this is correct
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials: true // Allow credentials if needed
+    origin: process.env.FRONTEND_URL,  // Make sure the correct frontend URL is used here
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowing methods
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allowing headers
+    credentials: true  // Allow credentials like cookies
 }));
 
+// Parsing middleware
 app.use(express.json());
 app.use(cookiesParser());
 
-// Handle preflight requests for all routes
-app.options('*', cors());
-
-// Set the port
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 
 // Basic route for checking server status
 app.get('/', (request, response) => {
@@ -35,12 +28,12 @@ app.get('/', (request, response) => {
     });
 });
 
-// API endpoints
+// API routes
 app.use('/api', router);
 
 // Connect to the database and start the server
 connectDB().then(() => {
-    app.listen(PORT, () => { // Use app.listen instead of server.listen if socket.io isn't needed
+    server.listen(PORT, () => {
         console.log("Server running at " + PORT);
     });
 }).catch(err => {
