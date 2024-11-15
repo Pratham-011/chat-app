@@ -1,3 +1,5 @@
+Here is the demo link: https://leafy-fudge-1f2790.netlify.app
+
 Chat App with React, Socket.io, Node.js, Redux-Toolkit, and MongoDB (2024)
 
 This project demonstrates how to build a real-time messaging Chat App using React for the frontend, Socket.io for real-time communication, Node.js for the backend, Redux-Toolkit for state management, and MongoDB for database operations.
