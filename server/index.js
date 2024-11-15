@@ -10,9 +10,21 @@ const { app: socketApp, server } = require('./socket/index'); // Rename 'app' to
 const app = express();
 
 // CORS configuration
+const allowedOrigins = [
+    process.env.FRONTEND_URL, // Production frontend
+    'http://localhost:3000'  // Development frontend
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // Ensure this is set correctly in your .env
-    credentials: true // Allow credentials if needed
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g., mobile apps, Postman) or listed origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true // Allow cookies and credentials
 }));
 
 // Middleware
@@ -20,7 +32,13 @@ app.use(express.json());
 app.use(cookiesParser());
 
 // Handle preflight requests for all routes
-app.options('*', cors());
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(204); // No Content
+});
 
 // Set the port
 const PORT = process.env.PORT || 8080;
