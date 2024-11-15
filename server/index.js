@@ -4,7 +4,7 @@ require('dotenv').config();
 const connectDB = require('./config/connectDB');
 const router = require('./routes/index');
 const cookiesParser = require('cookie-parser');
-const { app, server } = require('./socket/index'); // Adjust this as necessary
+const { app: socketApp, server } = require('./socket/index'); // Rename 'app' to 'socketApp'
 
 // Initialize Express app
 const app = express();
@@ -12,7 +12,6 @@ const app = express();
 // CORS configuration
 app.use(cors({
     origin: process.env.FRONTEND_URL, // Ensure this is set correctly in your .env
-    
     credentials: true // Allow credentials if needed
 }));
 
