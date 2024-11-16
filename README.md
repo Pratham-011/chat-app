@@ -1,4 +1,6 @@
-Here is the demo link: https://leafy-fudge-1f2790.netlify.app
+Here is the demo video link: https://youtu.be/RLf01UWWlR0
+
+Here is the deployed link: https://leafy-fudge-1f2790.netlify.app
 
 Chat App with React, Socket.io, Node.js, Redux-Toolkit, and MongoDB (2024)
 
